@@ -14,7 +14,6 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'klen/python-mode'
 
-
 "My usual settings
 set number
 syntax on
@@ -22,10 +21,22 @@ set ts=4
 set sw=4
 set expandtab
 
-" Use l to toggle display of whitespace
-nmap l :set list!
+"Display whitespace chars
+set list
 " And set some nice chars to do it with
 set listchars=tab:»\ ,eol:¬
+
+"Bindings for splits 
+
+"Quick resize
+nnoremap <C-u> <C-W>><C-W>>
+nnoremap <C-y> <C-W><<C-W><
+"Quick navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
 
 
 "Powerline stuff
@@ -95,3 +106,7 @@ let g:pymode_syntax_space_errors = g:pymode_syntax_all
 
 " Don't autofold code
 let g:pymode_folding = 0
+
+
+
+
