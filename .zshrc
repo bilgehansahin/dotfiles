@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="${HOME}/.oh-my-zsh"
+export ZSH="/home/archer/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -70,7 +70,7 @@ ZSH_THEME="agnoster"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git-prompt git-extras virtualenv tmux nvm yarn npm docker docker-compose gh gatsby kubectl python)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,3 +99,62 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Disable shared history
+unsetopt share_history
+
+########################
+# Prompt Configuration #
+########################
+if [ "Darwin" = "$(uname -s)" ]; then
+    ENVIRONMENT=apple
+elif [ "Ubuntu" = $(lsb_release -i -s 2>/dev/null || echo) ]; then
+    ENVIRONMENT=ubuntu
+else
+    ENVIRONMENT=linux
+fi
+
+case $ENVIRONMENT in
+apple)
+    PROMPT_LOGO=💻
+    PROMPT_LOGO_FG=white
+    PROMPT_LOGO_BG=green
+    ;;
+ubuntu)
+    PROMPT_LOGO=☁️
+    PROMPT_LOGO_FG=blue
+    PROMPT_LOGO_BG=white
+    ;;
+*)
+    PROMPT_LOGO=🐧
+    PROMPT_LOGO_FG=blue
+    PROMPT_LOGO_BG=white
+    ;;
+esac
+
+prompt_context() {
+    prompt_segment $PROMPT_LOGO_BG $PROMPT_LOGO_FG $PROMPT_LOGO
+}
+
+prompt_time() {
+    # 236, 245 are xterm colors, see https://jonasjacek.github.io/colors/
+    datestamp=$(date +"%x")
+    timestamp=$(date +"%X")
+    prompt_segment 236 245 "$datestamp %F{white}$timestamp%f"
+}
+
+## Main prompt
+build_prompt() {
+    RETVAL=$?
+    prompt_time
+    prompt_dir
+    prompt_segment '' '' "\n"
+    prompt_context
+    prompt_status
+    prompt_virtualenv
+    prompt_aws
+    prompt_git
+    prompt_end
+}
+
+PROMPT='%{%f%b%k%}$(build_prompt) '
